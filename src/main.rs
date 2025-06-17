@@ -3,6 +3,8 @@ use sqlx::SqlitePool;
 use sqlx::sqlite::{SqliteConnectOptions, SqliteJournalMode, SqliteSynchronous};
 use tokio::net::TcpListener;
 
+mod models;
+
 #[tokio::main]
 async fn main() -> Result<(), SetupError> {
     tracing_subscriber::fmt::init();
