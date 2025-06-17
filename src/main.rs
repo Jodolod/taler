@@ -4,6 +4,7 @@ use sqlx::sqlite::{SqliteConnectOptions, SqliteJournalMode, SqliteSynchronous};
 use tokio::net::TcpListener;
 
 mod models;
+mod routes;
 
 #[tokio::main]
 async fn main() -> Result<(), SetupError> {
@@ -19,7 +20,7 @@ async fn main() -> Result<(), SetupError> {
     tracing::info!("using database at {db_path}");
     sqlx::migrate!().run(&db).await?;
 
-    let app = Router::new();
+    let app = Router::new().nest("/api", routes::router(db));
 
     let addr = std::env::var("LISTEN_ADDR").unwrap_or_else(|_| "0.0.0.0:8080".to_string());
     let listener = TcpListener::bind(&addr).await?;
